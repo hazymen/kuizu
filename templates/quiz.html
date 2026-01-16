@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Q{{ quiz_number }} - 物理基礎クイズ{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <p class="progress-text">問題 {{ quiz_number }} / {{ total_quizzes }}</p>
+
+    <div class="quiz-card">
+        <div class="quiz-header">
+            <h2>Q{{ quiz_number }}: {{ quiz.background }}</h2>
+        </div>
+
+        <div class="quiz-body">
+            <div class="question">
+                <p id="question-text">{{ quiz.question }}</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('result') }}" class="quiz-form">
+                <input type="hidden" name="quiz_id" value="{{ quiz_number }}">
+                
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="selected" value="0" required>
+                        <span class="option-text">{{ quiz.options[0].text }}</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="selected" value="1" required>
+                        <span class="option-text">{{ quiz.options[1].text }}</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="selected" value="2" required>
+                        <span class="option-text">{{ quiz.options[2].text }}</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="selected" value="3" required>
+                        <span class="option-text">{{ quiz.options[3].text }}</span>
+                    </label>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">回答を送信</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">戻る</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('progress-fill').style.width = '{{ progress_width }}%';
+        if (window.MathJax) {
+            MathJax.contentDocument = document;
+            MathJax.typesetPromise().catch(function(err) { console.log(err); });
+        }
+    });
+</script>
+{% endblock %}

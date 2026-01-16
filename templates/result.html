@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}結果 - 物理基礎クイズ{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="result-card">
+        {% if is_correct %}
+        <div class="result-status correct">
+            <div class="result-icon">✅</div>
+            <h2>正解です！</h2>
+        </div>
+        {% else %}
+        <div class="result-status incorrect">
+            <div class="result-icon">❌</div>
+            <h2>不正解です</h2>
+        </div>
+        {% endif %}
+
+        <div class="result-body">
+            <div class="question-section">
+                <h3>問題</h3>
+                <p id="question-text">{{ quiz.question }}</p>
+            </div>
+
+            <div class="answer-section">
+                <h3>あなたの答え</h3>
+                <p class="selected-answer" id="selected-text">{{ selected_option.text }}</p>
+            </div>
+
+            {% if not is_correct %}
+            <div class="correct-answer-section">
+                <h3>正解</h3>
+                <p class="correct-answer" id="correct-text">{{ quiz.options[correct_index].text }}</p>
+            </div>
+            {% endif %}
+
+            <div class="explanation-section">
+                <h3>📖 解説</h3>
+                <p id="explanation-text">{{ quiz.explanation }}</p>
+            </div>
+
+            <div class="button-group">
+                {% if quiz_number < total_quizzes %}
+                <a href="{{ url_for('quiz', quiz_id=quiz_number + 1) }}" class="btn btn-primary">次の問題へ</a>
+                {% else %}
+                <a href="{{ url_for('index') }}" class="btn btn-primary">クイズ一覧に戻る</a>
+                {% endif %}
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">最初に戻る</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // MathJaxを使って数式をレンダリング
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.MathJax) {
+            MathJax.contentDocument = document;
+            MathJax.typesetPromise().catch(err => console.log(err));
+        }
+    });
+</script>
+{% endblock %}
